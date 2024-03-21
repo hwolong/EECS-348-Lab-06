@@ -4,14 +4,13 @@
 #include <vector>
 using namespace std;
 
-void printMatrix(int size1, int size2, int matrix[][3]){
+/*
+void printMatrix(int size1, int size2, vector<vector<int>> matrix){
     for (int i = 0; i < size1; i++) {
-        for (int j = 0; j < size2; j++) {
-            cout << matrix[i][j] << " ";
-        }
-        cout << "\n";
+        cout << matrix[i] << '\n';
     }
 }
+*/
 
 int main() {
     fstream file("matrix_input.txt", ios::in);
@@ -19,12 +18,15 @@ int main() {
     file.read(data, sizeof(data));
     file.close();
     int arraySize = data[0] - '0';
-    int dataMatrices[] = {0};
-    int currentMatrix = 0;
+    vector<vector<vector<int>>> dataMatrices;
     int dataIndex = 1;
     bool makingArrays = true;
     while (makingArrays == true) {
-        int dataMatrix[arraySize][arraySize];
+        vector<vector<int>> dataMatrix = {
+            {0,0,0},
+            {0,0,0},
+            {0,0,0}
+        };
         for (int i = 0; i < arraySize; i++) {
             for (int j = 0; j < arraySize; i++) {
                 bool numAdded = false;
@@ -48,6 +50,14 @@ int main() {
                         // if not, just increments index within data array and does nothing else
                         dataIndex++;
                     }
+                }
+            }
+            dataMatrices.push_back(dataMatrix);
+            makingArrays = false;
+            int tempIndex = dataIndex;
+            while (tempIndex < sizeof(data)) {
+                if (data[tempIndex] != ' ' && data[tempIndex] != '\n') {
+                    makingArrays = true;
                 }
             }
         }
@@ -85,5 +95,15 @@ int main() {
     */
     // nested for loops to print the dataMatrix
     //printMatrix(6,3,dataMatrix);
+    for (int i = 0; i < sizeof(dataMatrices); i++) {
+        for (int j = 0; j < sizeof(dataMatrices[i]); j++) {
+            for (int k = 0; k < sizeof(dataMatrices[i][j]); k++) {
+                for (int l = 0; l < sizeof(dataMatrices[i][j][k]); l++) {
+                    cout << l;
+                }
+                cout << '\n';
+            }
+        }
+    }
     return 0;
 }
