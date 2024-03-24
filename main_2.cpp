@@ -115,16 +115,12 @@ int matrixMax(vector<vector<int>> matrix, int arraySize) {
 vector<vector<int>> transposeMatrix(vector<vector<int>> matrix, int arraySize) {
     vector<vector<int>> newMatrix;
     for (int i = 0; i < arraySize; i++) {
-        vector<int> zeroRow;
-        for (int j = 0; j < arraySize; i++) {
-            zeroRow.push_back(0);
+        vector<int> newMatrixRow;
+        for (int j = 0; j < arraySize; j++) {
+            int newMatrixInt = matrix[j][i];
+            newMatrixRow.push_back(newMatrixInt);
         }
-        newMatrix.push_back(zeroRow);
-    }
-    for (int i = 0; i < arraySize; i++) {
-        for (int j = 0; j < arraySize; i++) {
-            newMatrix[i][j] = matrix[j][i];
-        }
+        newMatrix.push_back(newMatrixRow);
     }
     return newMatrix;
 }
@@ -157,6 +153,6 @@ int main() {
     cout << "7. Get the max value of the first matrix:\n";
     cout << matrixMax(dataMatrices[0], arraySize) << "\n\n";
     cout << "8. Transpose the first matrix; print the result.\n";
-    //printMatrix(transposeMatrix(dataMatrices[0], arraySize), arraySize);
+    printMatrix(transposeMatrix(dataMatrices[0], arraySize), arraySize);
     return 0;
 }
