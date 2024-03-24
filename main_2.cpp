@@ -71,7 +71,10 @@ vector<vector<int>> multiplyMatrices(int arraySize) {
     for (int i = 0; i < arraySize; i++) {
         vector<int> newMatrixRow;
         for (int j = 0; j < arraySize; j++) {
-            int newMatrixInt = dataMatrices[0][i][j] * dataMatrices[1][i][j];
+            int newMatrixInt = 0;
+            for (int l = 0; l < arraySize; l++) {
+                newMatrixInt += (dataMatrices[0][i][l] * dataMatrices[1][l][j]);
+            }
             newMatrixRow.push_back(newMatrixInt);
         }
         newMatrix.push_back(newMatrixRow);
@@ -95,6 +98,35 @@ vector<vector<int>> subtractMatrices(vector<vector<int>> matrix1, vector<vector<
 vector<vector<int>> updateMatrix(vector<vector<int>> matrix, int row, int col, int newVal) {
     matrix[row][col] = newVal;
     return matrix;
+}
+
+int matrixMax(vector<vector<int>> matrix, int arraySize) {
+    int max = 0;
+    for (int i = 0; i < arraySize; i++) {
+        for (int j = 0; j < arraySize; j++) {
+            if (max < matrix[i][j]) {
+                max = matrix[i][j];
+            }
+        }
+    }
+    return max;
+}
+
+vector<vector<int>> transposeMatrix(vector<vector<int>> matrix, int arraySize) {
+    vector<vector<int>> newMatrix;
+    for (int i = 0; i < arraySize; i++) {
+        vector<int> zeroRow;
+        for (int j = 0; j < arraySize; i++) {
+            zeroRow.push_back(0);
+        }
+        newMatrix.push_back(zeroRow);
+    }
+    for (int i = 0; i < arraySize; i++) {
+        for (int j = 0; j < arraySize; i++) {
+            newMatrix[i][j] = matrix[j][i];
+        }
+    }
+    return newMatrix;
 }
 
 int main() {
@@ -121,5 +153,10 @@ int main() {
     cout << "Chosen update: (0,0) in first matrix updated to 100:\n";
     dataMatrices[0] = updateMatrix(dataMatrices[0], 0, 0, 100);
     printMatrix(dataMatrices[0], arraySize);
+    dataMatrices[0] = updateMatrix(dataMatrices[0], 0, 0, 1);
+    cout << "7. Get the max value of the first matrix:\n";
+    cout << matrixMax(dataMatrices[0], arraySize) << "\n\n";
+    cout << "8. Transpose the first matrix; print the result.\n";
+    //printMatrix(transposeMatrix(dataMatrices[0], arraySize), arraySize);
     return 0;
 }
