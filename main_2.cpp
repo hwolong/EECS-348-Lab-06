@@ -4,6 +4,8 @@
 #include <vector>
 using namespace std;
 
+vector<vector<vector<int>>> dataMatrices;
+
 vector<int> matrixIO(string fileName) {
     vector<int> data = {0};
     fstream fileStream;
@@ -17,9 +19,7 @@ vector<int> matrixIO(string fileName) {
     return data;
 }
 
-
-vector<vector<vector<int>>> makeArray(int arraySize, vector<int> data) {
-    vector<vector<vector<int>>> matrixList;
+void makeMatrices(vector<int> data, int arraySize) {
     int matrixCount = 0;
     for (int i = 0; i < sizeof(data); i++) {
         if (data[i] != 10) {
@@ -32,35 +32,94 @@ vector<vector<vector<int>>> makeArray(int arraySize, vector<int> data) {
     for (int i = 0; i < matrixCount; i++) {
         vector<vector<int>> dataMatrix;
         for (int j = 0; j < arraySize; j++) {
-            vector<int> matrixLine;
+            vector<int> matrixRow;
             for (int k = 0; k < arraySize; k++) {
-                matrixLine.push_back(data[dataIndex]);
+                matrixRow.push_back(data[dataIndex]);
                 dataIndex++;
             }
-            dataMatrix.push_back(matrixLine);
+            dataMatrix.push_back(matrixRow);
         }
-        matrixList.push_back(dataMatrix);
+        dataMatrices.push_back(dataMatrix);
     }
-    return matrixList;
+}
+
+void printMatrix(vector<vector<int>> matrix, int arraySize) {
+    for (int i = 0; i < arraySize; i++) {
+        for (int j = 0; j < arraySize; j++) {
+            cout << matrix[i][j] << "\t";
+        }
+        cout << "\n";
+    }
+    cout << "\n";
+}
+
+vector<vector<int>> addMatrices(int arraySize) {
+    vector<vector<int>> newMatrix;
+    for (int i = 0; i < arraySize; i++) {
+        vector<int> newMatrixRow;
+        for (int j = 0; j < arraySize; j++) {
+            int newMatrixInt = dataMatrices[0][i][j] + dataMatrices[1][i][j];
+            newMatrixRow.push_back(newMatrixInt);
+        }
+        newMatrix.push_back(newMatrixRow);
+    }
+    return newMatrix;
+}
+
+vector<vector<int>> multiplyMatrices(int arraySize) {
+    vector<vector<int>> newMatrix;
+    for (int i = 0; i < arraySize; i++) {
+        vector<int> newMatrixRow;
+        for (int j = 0; j < arraySize; j++) {
+            int newMatrixInt = dataMatrices[0][i][j] * dataMatrices[1][i][j];
+            newMatrixRow.push_back(newMatrixInt);
+        }
+        newMatrix.push_back(newMatrixRow);
+    }
+    return newMatrix;
+}
+
+vector<vector<int>> subtractMatrices(vector<vector<int>> matrix1, vector<vector<int>> matrix2, int arraySize) {
+    vector<vector<int>> newMatrix;
+    for (int i = 0; i < arraySize; i++) {
+        vector<int> newMatrixRow;
+        for (int j = 0; j < arraySize; j++) {
+            int newMatrixInt = matrix1[i][j] - matrix2[i][j];
+            newMatrixRow.push_back(newMatrixInt);
+        }
+        newMatrix.push_back(newMatrixRow);
+    }
+    return newMatrix;
+}
+
+vector<vector<int>> updateMatrix(vector<vector<int>> matrix, int row, int col, int newVal) {
+    matrix[row][col] = newVal;
+    return matrix;
 }
 
 int main() {
+    cout << "1. Read values from a file into a matrix:\n\n";
     string fileName = "matrix_input.txt";
     vector<int> data = matrixIO(fileName);
     data.erase(data.begin());
     int arraySize = data[0];
     data.erase(data.begin());
-    for (int i = 0; i < 98; i++) {
-        cout << data[i] << " ";
+    makeMatrices(data, arraySize);
+    cout << "2. Print a matrix:\n";
+    for (int i = 0; i < 2; i++) {
+        cout << "Matrix " << i+1 << ":\n";
+        printMatrix(dataMatrices[i], arraySize);
+        cout << "\n";
     }
-    cout << "\n";
-    vector<vector<vector<int>>> matrixList = makeArray(arraySize, data);
-    for (int i = 0; i < sizeof(matrixList); i++) {
-        for (int j = 0; j < sizeof(matrixList[i]); j++) {
-            for (int k = 0; k < sizeof(matrixList[i][j]); k++) {
-                cout << k << " ";
-            }
-            cout << "\n";
-        }
-    }
+    cout << "3. Add two matrices and place the result into a third matrix; print the result:\n";
+    printMatrix(addMatrices(arraySize), arraySize);
+    cout << "4. Multiply two matrices and place the result into a third matrix; print the result:\n";
+    printMatrix(multiplyMatrices(arraySize), arraySize);
+    cout << "5. Subtract the second matrix from the first matrix and place the result in a third matrix; print the result:\n";
+    printMatrix(subtractMatrices(dataMatrices[0], dataMatrices[1], arraySize), arraySize);
+    cout << "6. Update an element of the first matrix; print the result:\n";
+    cout << "Chosen update: (0,0) in first matrix updated to 100:\n";
+    dataMatrices[0] = updateMatrix(dataMatrices[0], 0, 0, 100);
+    printMatrix(dataMatrices[0], arraySize);
+    return 0;
 }
